@@ -1,0 +1,25 @@
+# idea
+target
+/.idea
+/.idea_modules
+/.classpath
+/.project
+/.settings
+/RUNNING_PID
+
+*.iml
+
+# editor
+*.swp
+*~
+
+# tmp
+logs
+*.log
+/*RUN_PID
+
+# Mac
+.DS_Store
+
+# ensime
+.ensime*
