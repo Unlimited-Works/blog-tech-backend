@@ -1,2 +1,2 @@
 # Blog Tech
-write a tech blog just like edit text on your PC.
+write a blog just like edit text on your PC.
