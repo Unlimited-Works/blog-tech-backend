@@ -23,3 +23,7 @@ logs
 
 # ensime
 .ensime*
+
+# conf
+local.conf
+online.conf
