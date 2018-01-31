@@ -1,31 +1,25 @@
 package blogtech.core
 
-import java.io.File
 
-import com.typesafe.config.{Config, ConfigFactory, ConfigRenderOptions}
+import com.typesafe.config.Config
 
 /**
   *
   */
 object BlogConfig {
-  private val fileConf = ConfigFactory.parseFile(new File("./application.conf"))
-  private val online = ConfigFactory.parseResourcesAnySyntax("online")
-  private val local = ConfigFactory.parseResourcesAnySyntax("local")
-  private val develop = ConfigFactory.parseResourcesAnySyntax("application") //application is also develop environment in this project
-  private val default = ConfigFactory.load() //default environment
-
-  private val myConfig = fileConf.withFallback(online).withFallback(local).withFallback(develop).resolve()
-  private val combinedConfig = myConfig.withFallback(default)
+  import blogtech.util.ConfigLoader._
 
   val gitConfig: Config = combinedConfig.getConfig("blogtech.git")
   val gitEnv = GitEnv(gitConfig.getString("path"))
 
-  def prefixConfig(prefix: String, srcConfig: Config) = ConfigFactory.parseString(prefix).withFallback(srcConfig)
-  def printConf(config: Config): Unit = println(config.root().render(ConfigRenderOptions.concise().setFormatted(true).setJson(true)))
+  val dbConfig: Config = combinedConfig.getConfig("blogtech.db")
+  val dbEnv = DbEnv(dbConfig.getString("user"), dbConfig.getString("password"))
 
-  println("===========BlogConfigBegin=============")
-  printConf(myConfig)
-  println("===========BlogConfigEnd===============")
+  val sshConfig: Config = combinedConfig.getConfig("blogtech.ssh")
+  val sshEnv = DbEnv(dbConfig.getString("user"), dbConfig.getString("password"))
+
 }
 
 case class GitEnv(path: String)
+case class SSHEnv(user: String, password: String)
+case class DbEnv(user: String, password: String)

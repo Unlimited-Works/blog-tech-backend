@@ -1,14 +1,14 @@
 package blogtech.core
 
-import lorance.scall.{Auth, Config, Password, SessionTerminal}
+import lorance.scall.{Auth, Config, Password, SessionPool}
 import org.junit.Test
 
 /**
   *
   */
 class GitOpsTest {
-  val sessionTerminal = new SessionTerminal(Auth("localhost", None, 22, Password("xxx")), Config(10, 5, 2))
-  val gitOps = new GitOps(sessionTerminal)
+  val sysSession = new SessionPool(Auth("localhost", None, 22, Password("xxx")), Config(10, 5, 2))
+  val gitOps = new GitOps(sysSession)
 
   @Test
   def getFile(): Unit = {

@@ -1,5 +1,6 @@
 package blogtech
 
+import blogtech.core.BlogConfig
 import cats.effect.IO
 import fs2.StreamApp
 import fs2.StreamApp.ExitCode
@@ -10,15 +11,12 @@ import org.http4s.server.blaze.BlazeBuilder
   *
   */
 object Main extends StreamApp[IO] {
-  /**
-    * load config
-    */
 
-  /**
+   /**
     * check and init environment:
     *   - git repos path
-    *
     */
+  BlogConfig
 
   //get all service
   val services: HttpService[IO] = blogtech.http.Http.httpService
