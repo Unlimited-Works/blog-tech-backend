@@ -3,7 +3,7 @@ scalacOptions ++= Seq("-Ypartial-unification")
 
 val dottyVersion = "0.5.0-RC1"
 val scalacVersion = "2.12.4"
-val Http4sVersion = "0.18.0-M8"
+val Http4sVersion = "0.18.0"
 val Specs2Version = "4.0.0"
 val LogbackVersion = "1.2.3"
 val doobieVersion = "0.5.0-M13"
