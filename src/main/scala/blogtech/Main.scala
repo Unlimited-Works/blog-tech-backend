@@ -6,6 +6,7 @@ import fs2.StreamApp
 import fs2.StreamApp.ExitCode
 import org.http4s.HttpService
 import org.http4s.server.blaze.BlazeBuilder
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
   *
