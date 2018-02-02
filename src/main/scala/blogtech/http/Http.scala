@@ -6,7 +6,7 @@ package blogtech.http
   */
 object Http {
   private val services: Service = Login andThen
-                                  Login2
+                                  Overview
 
   val httpService = services.service
 }
