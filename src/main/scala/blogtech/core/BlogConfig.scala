@@ -14,6 +14,9 @@ object BlogConfig {
 
   val dbConfig: Config = combinedConfig.getConfig("blogtech.db")
   val dbEnv = DbEnv(
+    dbConfig.getString("host"),
+    dbConfig.getInt("port"),
+    dbConfig.getString("database"),
     dbConfig.getString("user"),
     dbConfig.getString("password")
   )
@@ -29,4 +32,4 @@ object BlogConfig {
 
 case class GitEnv(path: String)
 case class SSHEnv(host: String, user: String, password: String)
-case class DbEnv(user: String, password: String)
+case class DbEnv(host: String, port: Int, database: String, user: String, password: String)

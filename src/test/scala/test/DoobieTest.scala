@@ -12,9 +12,7 @@ import doobie.util.transactor.Transactor.Aux
   *
   */
 class DoobieTest {
-  val xa: Aux[IO, Unit] = Transactor.fromDriverManager[IO](
-    "org.postgresql.Driver", "jdbc:postgresql:postgres", "postgres", ""
-  )
+  val xa = blogtech.dao.driver
 
   @Test
   def simpleTest: Unit = {

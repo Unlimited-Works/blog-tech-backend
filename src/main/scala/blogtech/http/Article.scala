@@ -18,7 +18,6 @@ object Article extends Http4sDsl[IO] with Service {
         blogtech.core.gitOps.getFile(username, filPathStr)
       }
 
-
       def tmplate(content: String) = {
         s"""<!doctype html>
            |<html lang="en">
