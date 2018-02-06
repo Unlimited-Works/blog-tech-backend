@@ -6,5 +6,14 @@ import lorance.scall.{Auth, Config, Password, SessionPool}
   *
   */
 package object core {
-  val sessionPool = new SessionPool(Auth("localhost", None, 22, Password("xxx")), Config(10, 5, 2))
+  val sessionPool = new SessionPool(Auth(BlogConfig.sshEnv.host,
+    Some(BlogConfig.sshEnv.user),
+    22,
+    Password(BlogConfig.sshEnv.password)),
+    Config(10, 5, 2),
+  )
+
+
+  val gitOps = new GitOps(sessionPool)
+
 }
