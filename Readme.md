@@ -1,8 +1,8 @@
 # Blog Tech
-writing a blog just like edit text.
+Writing a blog just like edit text.
 
 ## About
-Blog Tech is a web server blog community service Git repository via Linux SSH.
+Blog Tech is a web server blog community services Git repository.
 
 ## Principles
 1. 主要的文章文本数据基于Git数据仓库
@@ -11,7 +11,7 @@ Blog Tech is a web server blog community service Git repository via Linux SSH.
 4. 合适的默认行为
 
 ## Client
-any device support Git client should work fine with Blog Tech.
+Any device support Git client should work fine with Blog Tech.
 - [MacOS, Linux and Windows](https://git-scm.com/downloads)
 - [Android](https://termux.com/)
 - [iOS](https://workingcopyapp.com/)
