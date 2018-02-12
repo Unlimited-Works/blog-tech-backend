@@ -31,7 +31,6 @@ object Login extends Http4sDsl[IO] with Service {
 
       val rst = userData.flatMap{jsonStr =>
         val loginData = parse(jsonStr).extract[LoginReq]
-        logger.info("login data - " + loginData)
 
         val verifyLogin = blogtech.core.userOps.verifyUserPassword(loginData.account, loginData.password)
         verifyLogin flatMap {
