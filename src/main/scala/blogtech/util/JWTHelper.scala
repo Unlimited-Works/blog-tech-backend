@@ -1,5 +1,7 @@
 package blogtech.util
 
+import java.util.Date
+
 import blogtech.http.Overview.algorithm
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
@@ -8,6 +10,7 @@ import org.json4s._
 import org.json4s.native.JsonMethods._
 
 import scala.util.Try
+import scala.collection.convert.ImplicitConversions._
 
 /**
   *
@@ -30,4 +33,18 @@ object JWTHelper {
     content[PayLoad](token).map(_.userName)
   }
 
+  def create(data: Map[String, String]): String = {
+    val jwt = JWT.create
+      .withHeader(Map("typ" -> "JWT"))
+      .withExpiresAt(new Date(System.currentTimeMillis()))
+
+    data.foreach(x => jwt.withClaim(x._1, x._2))
+
+    jwt.sign(algorithm)
+  }
+
+  def create[T: Manifest](data: T): String = {
+    val map = decompose(data).extract[Map[String, String]]
+    create(map)
+  }
 }

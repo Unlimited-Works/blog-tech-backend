@@ -10,7 +10,7 @@ trait HttpHelper {
   def checkUserExistInDbOr404(userName: String, onSuccess: UserDao.UserData => IO[Response[IO]]): IO[Response[IO]] = {
     UserDao.getUserByName(userName).flatMap{
       case None =>
-        NotFound.apply()
+        NotFound()
       case Some(userData) =>
         onSuccess(userData)
     }

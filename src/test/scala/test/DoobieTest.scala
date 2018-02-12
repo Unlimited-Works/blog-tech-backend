@@ -6,7 +6,6 @@ import org.junit.Test
 import cats.data._
 import cats.effect._
 import cats.implicits._
-import doobie.util.transactor.Transactor.Aux
 
 /**
   *

@@ -19,12 +19,6 @@ object Overview extends Http4sDsl[IO] with Service {
   val userId = "userid0"
   val algorithm = Algorithm.HMAC256("sec")
 
-//  val x = JWT.create
-//    .withHeader(Map("typ" -> "JWT"))
-//    .withExpiresAt(new Date(expireAt))
-//    .withClaim("userId", userId)
-//    .sign(algorithm)
-
   val verifier = JWT.require(algorithm).build
 //  val y = verifier.verify(x)
 

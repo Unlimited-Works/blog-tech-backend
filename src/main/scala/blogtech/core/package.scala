@@ -16,4 +16,5 @@ package object core {
 
   val gitOps = new GitOps(sessionPool)
 
+  val userOps = new UserOps()
 }
