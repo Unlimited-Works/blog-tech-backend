@@ -8,6 +8,8 @@ import org.http4s.{Header, HttpService}
 import org.http4s.dsl.Http4sDsl
 import org.http4s.headers.Cookie
 import monix.execution.Scheduler.Implicits.global
+import org.json4s.JsonDSL._
+import org.json4s.native.JsonMethods._
 
 /**
   * http://{host}/{username}
@@ -23,6 +25,49 @@ object Overview extends Http4sDsl[IO] with Service {
 //  val y = verifier.verify(x)
 
   override val service: HttpService[IO] = HttpService[IO] {
+    case req @ GET -> Root / username
+         if username.endsWith(".json") =>
+      def doLogic = {
+        val cookieOpt = req.headers.get(Cookie)
+
+        //get jwt from cookie
+        val userInfo = cookieOpt.flatMap { cki =>
+          val jwtCki = cki.values.find(c => {
+            c.name == Http.jwtCookie
+          })
+
+          val uname = jwtCki.flatMap { jwtc =>
+            val token = jwtc.content
+            JWTHelper.userName(token)
+          }
+
+          uname
+        }
+
+        // 1. is owner - show all file
+        // 2. is others - show only non-private
+        val dirListFur = (userInfo match {
+          case Some(uname) if uname == username => //owner
+            gitOps.getAllFilesPath(username)
+          case _ => //others
+            gitOps.getPublicFilesPath(username)
+        }).map(x => x.right.get.split('\n').toList)
+
+        val rst = Task.fromFuture(dirListFur).toIO.flatMap { dirList =>
+          def toUrlHref(dir: String) = s"""/$username/article/$dir"""
+
+          val urlDirList = dirList.map(toUrlHref)
+
+          Ok(
+            compact(render(("status" -> 200) ~ ("data" -> urlDirList)))
+          ).putHeaders(Header("Content-Type", "application/json"))
+
+        }
+        rst
+      }
+
+      HttpHelper.checkUserExistInDbOr404(username, _ => doLogic)
+
     // html page
     case req @ GET -> Root / username =>
       def doLogic = {
