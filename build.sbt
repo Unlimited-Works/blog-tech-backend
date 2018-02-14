@@ -38,6 +38,7 @@ lazy val root = (project in file("."))
 //      "com.pauldijou" %% "jwt-json4s-native" % "0.14.1",
       "io.monix" %% "monix" % "3.0.0-M3",
       "com.auth0" % "java-jwt" % "3.3.0",
+      "org.planet42" %% "laika-core" % "0.7.5",
     )
   )
 
