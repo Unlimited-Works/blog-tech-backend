@@ -33,7 +33,7 @@ object Overview extends Http4sDsl[IO] with Service {
         //get jwt from cookie
         val userInfo = cookieOpt.flatMap { cki =>
           val jwtCki = cki.values.find(c => {
-            c.name == Http.jwtCookie
+            c.name == HttpConstants.JwtCookie
           })
 
           val uname = jwtCki.flatMap { jwtc =>
@@ -76,7 +76,7 @@ object Overview extends Http4sDsl[IO] with Service {
         //get jwt from cookie
         val userInfo = cookieOpt.flatMap { cki =>
           val jwtCki = cki.values.find(c => {
-            c.name == Http.jwtCookie
+            c.name == HttpConstants.JwtCookie
           })
 
           val uname = jwtCki.flatMap { jwtc =>

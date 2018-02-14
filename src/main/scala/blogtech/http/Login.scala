@@ -37,7 +37,7 @@ object Login extends Http4sDsl[IO] with Service {
           case true =>
             Ok(compact(render("status" -> 200)))
               .addCookie(
-                Http.jwtCookie,
+                HttpConstants.JwtCookie,
                 JWTHelper.create(JWTHelper.PayLoad(loginData.account)),
                 Some(HttpDate.unsafeFromEpochSecond(System.currentTimeMillis() / 1000L + 60 * 60 * 24 * 365L))
               ).putHeaders(Header("Content-Type", "application/json"))

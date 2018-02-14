@@ -14,5 +14,4 @@ object Http {
 
   val httpService: HttpService[IO] = services.service
 
-  val jwtCookie = "blogTechJwt"
 }
