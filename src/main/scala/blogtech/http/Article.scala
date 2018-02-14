@@ -1,5 +1,6 @@
 package blogtech.http
 
+import blogtech.util.Helper
 import cats.effect.IO
 import monix.eval.Task
 import org.http4s.dsl.Http4sDsl
@@ -48,7 +49,7 @@ object Article extends Http4sDsl[IO] with Service {
            |    <title>The HTML5 Herald</title>
            |  </head>
            |  <body>
-           |    <p>$content</p>
+           |    ${Helper.md2Html(content)}
            |  </body>
            |</html>
              """.stripMargin
