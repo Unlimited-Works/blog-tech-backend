@@ -2,7 +2,6 @@ package blogtech.util
 
 import java.util.Date
 
-import blogtech.http.Overview.algorithm
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import org.json4s.Extraction._
@@ -23,14 +22,24 @@ object JWTHelper {
   //saved keys
   case class PayLoad(userName: String)
 
-  def content[T: Manifest](token: String): Option[T] = {
+  def contentOf[T](token: String, jValue: JObject => T): Option[T] = {
     Try(
-      parse(verifier.verify(token).getPayload).extract[T]
+      jValue(parse(verifier.verify(token).getPayload).extract[JObject])
+    ).toOption
+  }
+
+
+  def contentEntity(token: String): Option[PayLoad] = {
+    Try(
+      parse(verifier.verify(token).getPayload).extract[PayLoad]
     ).toOption
   }
 
   def userName(token: String): Option[String] = {
-    content[PayLoad](token).map(_.userName)
+    contentOf(token, x => {
+      val JString(userName) = x \ "userName"
+      userName
+    })
   }
 
   def create(data: Map[String, String]): String = {
