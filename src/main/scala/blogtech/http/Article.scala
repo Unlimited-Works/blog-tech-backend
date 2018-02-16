@@ -18,11 +18,12 @@ object Article extends Http4sDsl[IO] with Service {
     // html page
     case req @ GET -> username /: "article" /: filePath
       if filePath.lastOption.fold(false)(_.endsWith(".json")) =>
+      val filPathStr = filePath.toString.tail //ignore '/' at beginning
+      val rawFilePath = filPathStr.take(filPathStr.length - 5) // remove ".json"
 
       def doLogic = {
-        val filPathStr = filePath.toString.tail //ignore '/' at beginning
         val articleContent = {
-          blogtech.core.gitOps.getFile(username, filPathStr.take(filPathStr.length - 5)) //remove ".json"
+          blogtech.core.gitOps.getFile(username, rawFilePath)
         }
 
         Task.fromFuture(articleContent)
@@ -52,11 +53,11 @@ object Article extends Http4sDsl[IO] with Service {
           blogtech.core.gitOps.getFile(username, filPathStr)
         }
 
-        def tmplate(content: String, dealContent: String => String) = {
+        def template(content: String, dealContent: String => String) = {
           s"""<!doctype html>
-             |<html lang="en">
+             |<html lang="zh-cn">
              |  <head>
-             |    <meta charset="utf-8"/>
+             |    <meta charset="UTF-8" />
              |    <title>The HTML5 Herald</title>
              |  </head>
              |  <body>
@@ -68,13 +69,14 @@ object Article extends Http4sDsl[IO] with Service {
 
         Task.fromFuture(articleContent).map{
           case Right(content) =>
-            filPathStr.split('.')
+            val convertedContent = filPathStr.split('.')
               .lastOption
               .fold(content)(fileType => {
                 contentConvert(fileType, content)
               })
+            template(content, _ => convertedContent)
           case Left(error) =>
-            tmplate(error.toString, x => x)
+            template(error.toString, x => x)
         }
         .toIO
         .flatMap(x =>
