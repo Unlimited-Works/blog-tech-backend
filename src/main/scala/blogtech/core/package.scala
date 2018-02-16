@@ -13,7 +13,6 @@ package object core {
     Config(10, 5, 2),
   )
 
-
   val gitOps = new GitOps(sessionPool)
 
   val userOps = new UserOps()

@@ -1,14 +1,14 @@
-package blogtech.dao
+package blogtech.util.dao
 
-import java.sql.SQLException
-
+import cats.effect.IO
 import doobie.implicits._
+import doobie.util.transactor.Transactor.Aux
 import org.slf4j.LoggerFactory
 
 /**
   *
   */
-object UserDao {
+class UserDao(driver: Aux[IO, Unit]) {
   private val logger = LoggerFactory.getLogger(getClass)
   case class UserData(oid: String, username: String, email: String, password: String)
 

@@ -1,5 +1,6 @@
 package blogtech.http
 
+import blogtech.core.CoreHelper
 import blogtech.util.Helper
 import cats.effect.IO
 import monix.eval.Task
@@ -41,12 +42,12 @@ object Article extends Http4sDsl[IO] with Service {
 
     case req @ GET -> username /: "article" /: filePath  =>
       def doLogic = {
+        val filPathStr = filePath.toString.tail //ignore '/' at beginning
         val articleContent = {
-          val filPathStr = filePath.toString.tail //ignore '/' at beginning
           blogtech.core.gitOps.getFile(username, filPathStr)
         }
 
-        def tmplate(content: String) = {
+        def tmplate(content: String, dealContent: String => String) = {
           s"""<!doctype html>
              |<html lang="en">
              |  <head>
@@ -54,17 +55,19 @@ object Article extends Http4sDsl[IO] with Service {
              |    <title>The HTML5 Herald</title>
              |  </head>
              |  <body>
-             |    ${Helper.md2Html(content)}
+             |    ${dealContent(content)}
              |  </body>
              |</html>
              """.stripMargin
         }
 
         Task.fromFuture(articleContent).map{
+          case Right(content) if filPathStr.endsWith(".md") =>
+            tmplate(content, CoreHelper.md2Html)
           case Right(content) =>
-            tmplate(content)
+            tmplate(content, x => x)
           case Left(error) =>
-            tmplate(error.toString)
+            tmplate(error.toString, x => x)
         }
           .toIO
           .flatMap(x =>

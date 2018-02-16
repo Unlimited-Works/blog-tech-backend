@@ -1,15 +1,15 @@
-package blogtech.util
+package blogtech.core
 
 import java.util.Date
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import org.json4s.Extraction._
-import org.json4s._
+import org.json4s.JsonAST.JString
+import org.json4s.{DefaultFormats, JObject}
 import org.json4s.native.JsonMethods._
-
-import scala.util.Try
+import org.json4s.Extraction._
 import scala.collection.convert.ImplicitConversions._
+import scala.util.Try
 
 /**
   *

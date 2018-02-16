@@ -9,19 +9,10 @@ import com.typesafe.config.Config
 object BlogConfig {
   import blogtech.util.ConfigLoader._
 
-  val gitConfig: Config = combinedConfig.getConfig("blogtech.git")
+  private val gitConfig: Config = combinedConfig.getConfig("blogtech.git")
+  private val sshConfig: Config = combinedConfig.getConfig("blogtech.ssh")
+
   val gitEnv = GitEnv(gitConfig.getString("path"))
-
-  val dbConfig: Config = combinedConfig.getConfig("blogtech.db")
-  val dbEnv = DbEnv(
-    dbConfig.getString("host"),
-    dbConfig.getInt("port"),
-    dbConfig.getString("database"),
-    dbConfig.getString("user"),
-    dbConfig.getString("password")
-  )
-
-  val sshConfig: Config = combinedConfig.getConfig("blogtech.ssh")
   val sshEnv = SSHEnv(
     sshConfig.getString("host"),
     sshConfig.getString("user"),
@@ -32,4 +23,3 @@ object BlogConfig {
 
 case class GitEnv(path: String)
 case class SSHEnv(host: String, user: String, password: String)
-case class DbEnv(host: String, port: Int, database: String, user: String, password: String)

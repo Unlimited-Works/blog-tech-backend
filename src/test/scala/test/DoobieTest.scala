@@ -11,7 +11,7 @@ import cats.implicits._
   *
   */
 class DoobieTest {
-  val xa = blogtech.dao.driver
+  val xa = blogtech.util.dao.driver
 
   @Test
   def simpleTest: Unit = {

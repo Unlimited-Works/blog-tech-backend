@@ -1,5 +1,5 @@
 
-scalacOptions ++= Seq("-Ypartial-unification")
+Global / scalacOptions ++= Seq("-Ypartial-unification")
 
 val scalacVersion = "2.12.4"
 val Http4sVersion = "0.18.0"
@@ -23,6 +23,8 @@ lazy val doobieLibs = Seq(
   "org.tpolecat" %% "doobie-specs2"   % doobieVersion,
 )
 
+lazy val testLib = "junit" % "junit" % "4.12" % Test
+
 lazy val root = (project in file("."))
   .settings(
     name := "blog-tech",
@@ -33,12 +35,14 @@ lazy val root = (project in file("."))
     libraryDependencies ++=
       httpLibs
       ++: Seq(
-      "com.scalachan" %% "scall" % "0.7.1",
-      "org.json4s" %% "json4s-native" % "3.6.0-M2",
-      "io.monix" %% "monix" % "3.0.0-M3",
-      "com.auth0" % "java-jwt" % "3.3.0",
-      "org.planet42" %% "laika-core" % "0.7.5",
-    )
+        "com.scalachan" %% "scall" % "0.7.1",
+        "org.json4s" %% "json4s-native" % "3.6.0-M2",
+        "io.monix" %% "monix" % "3.0.0-M3",
+        "com.auth0" % "java-jwt" % "3.3.0",
+        "org.planet42" %% "laika-core" % "0.7.5",
+      )
+      :+ testLib
+
   )
   .dependsOn(util)
   .aggregate(util)
@@ -50,7 +54,10 @@ lazy val gitServer = (project in file("git-server"))
     scalaVersion := scalacVersion
   )
   .settings(
-    libraryDependencies ++= httpLibs
+    libraryDependencies ++=
+      httpLibs
+      :+ testLib
+
   )
   .dependsOn(util)
   .aggregate(util)
@@ -65,14 +72,13 @@ lazy val util = (project in file("util"))
     libraryDependencies ++=
       doobieLibs
       ++: Seq(
-      //test
-      "junit" % "junit" % "4.12" % Test,
+        //others
+        "ch.qos.logback"  %  "logback-classic"      % LogbackVersion,
+        "com.typesafe"    % "config"                % "1.3.1",
 
-      //others
-      "ch.qos.logback"  %  "logback-classic" % LogbackVersion,
-      "com.typesafe" % "config" % "1.3.1",
-
-    )
+        "org.http4s"      %% "http4s-blaze-client"  % Http4sVersion,
+      )
+      :+ testLib
   )
 
 

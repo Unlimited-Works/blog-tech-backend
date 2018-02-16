@@ -1,6 +1,7 @@
 package blogtech.dao
 
 import org.junit.Test
+import blogtech.util.dao.userDao
 
 /**
   *
@@ -9,7 +10,7 @@ class UserDaoTest {
 
   @Test
   def findUser(): Unit = {
-    println(UserDao.isExistByName("lorance").unsafeRunSync())
-    println(UserDao.getUserByName("lorance").unsafeRunSync())
+    println(userDao.isExistByName("lorance").unsafeRunSync())
+    println(userDao.getUserByName("lorance").unsafeRunSync())
   }
 }

@@ -1,6 +1,6 @@
 package blogtech.http
 
-import blogtech.util.JWTHelper
+import blogtech.core.JWTHelper
 import org.http4s.{Header, HttpDate, HttpService, Response}
 import cats.effect.IO
 import cats.implicits._
