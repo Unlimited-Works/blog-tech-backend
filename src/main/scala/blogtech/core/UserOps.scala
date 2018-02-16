@@ -17,7 +17,7 @@ class UserOps {
   def createAccount(userName: String, email: String, password: String) = {
     userDao.getUserByNameOrEmail(userName, email) flatMap {
       case Some(_) =>
-          IO(None)
+        IO(None)
       case None =>
         userDao.createUser(userDao.UserData(new ObjectId().toString, userName, email, password))
     }
