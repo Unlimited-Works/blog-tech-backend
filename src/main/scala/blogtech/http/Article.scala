@@ -20,15 +20,20 @@ object Article extends Http4sDsl[IO] with Service {
       if filePath.lastOption.fold(false)(_.endsWith(".json")) =>
 
       def doLogic = {
+        val filPathStr = filePath.toString.tail //ignore '/' at beginning
         val articleContent = {
-          val filPathStr = filePath.toString.tail //ignore '/' at beginning
           blogtech.core.gitOps.getFile(username, filPathStr.take(filPathStr.length - 5)) //remove ".json"
         }
 
         Task.fromFuture(articleContent)
           .map{
             case Right(content) =>
-              compact(render(("result" -> 200) ~ ("data" -> content)))
+              val convertedContent = {
+                filPathStr.split('.')
+                  .lastOption
+                  .fold(content)(fileType => contentConvert(fileType, content))
+              }
+              compact(render(("result" -> 200) ~ ("data" -> convertedContent)))
             case Left(error) =>
               compact(render(("result" -> 400) ~ ("data" -> error.toString)))
           }
@@ -62,17 +67,19 @@ object Article extends Http4sDsl[IO] with Service {
         }
 
         Task.fromFuture(articleContent).map{
-          case Right(content) if filPathStr.endsWith(".md") =>
-            tmplate(content, CoreHelper.md2Html)
           case Right(content) =>
-            tmplate(content, x => x)
+            filPathStr.split('.')
+              .lastOption
+              .fold(content)(fileType => {
+                contentConvert(fileType, content)
+              })
           case Left(error) =>
             tmplate(error.toString, x => x)
         }
-          .toIO
-          .flatMap(x =>
-            Ok(x).putHeaders(Header("Content-Type", "text/html"))
-          )
+        .toIO
+        .flatMap(x =>
+          Ok(x).putHeaders(Header("Content-Type", "text/html"))
+        )
 
       }
 
@@ -100,5 +107,13 @@ object Article extends Http4sDsl[IO] with Service {
         NotFound()
     }
 
+  }
+
+  def contentConvert(fileType: String, content: String): String = {
+    if(fileType.endsWith("md")) {
+      CoreHelper.md2Html(content)
+    } else {
+      content
+    }
   }
 }
