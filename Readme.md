@@ -14,4 +14,5 @@ Blog Tech is a web server blog community services Git repository.
 Any device support Git client should work fine with Blog Tech.
 - [MacOS, Linux and Windows](https://git-scm.com/downloads)
 - [Android](https://termux.com/)
-- [iOS](https://workingcopyapp.com/)
+- [iOS WorkingCopy](https://workingcopyapp.com/)
+- iOS TIG
