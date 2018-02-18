@@ -4,11 +4,13 @@ import blogtech.core.JWTHelper
 import org.http4s.{Header, HttpDate, HttpService, Response}
 import cats.effect.IO
 import cats.implicits._
+import monix.eval.Task
 import org.http4s.dsl.Http4sDsl
 import org.json4s.DefaultFormats
 import org.json4s.JsonDSL._
 import org.json4s.native.JsonMethods._
 import org.slf4j.LoggerFactory
+import monix.execution.Scheduler.Implicits.global
 
 /**
   * login and register API
@@ -32,7 +34,7 @@ object Login extends Http4sDsl[IO] with Service {
       val rst = userData.flatMap{jsonStr =>
         val loginData = parse(jsonStr).extract[LoginReq]
 
-        val verifyLogin = blogtech.core.Core.userOps.verifyUserPassword(loginData.account, loginData.password)
+        val verifyLogin = blogtech.core.userOps.verifyUserPassword(loginData.account, loginData.password)
         verifyLogin flatMap {
           case true =>
             Ok(compact(render("status" -> 200)))
@@ -53,28 +55,40 @@ object Login extends Http4sDsl[IO] with Service {
 
       rst
     case req @ POST -> Root / "register.json" =>
-      val response: IO[IO[Response[IO]]] = for{
+      val response = for{
         registerStr <- req.as[String]
         registerData = parse(registerStr).extract[RegisterReq]
-        rst <- blogtech.core.Core.userOps
-              .createAccount(registerData.userName, registerData.email, registerData.password)
-
+        //to Executor pool use a custom block pool
+        createRepo <- Task.fromFuture(blogtech.core.gitOps.initRepo(registerData.userName)).toIO
       } yield {
-        rst match {
-          case None =>
-            Ok(compact(render(
+        createRepo match {
+          case Left(error) =>
+            IO(Ok(compact(render(
               ("status" -> 400) ~
-                ("reason" -> "user_has_exist")
-            ))).putHeaders(Header("Content-Type", "application/json"))
-          case Some(oid) =>
-            Ok(compact(render(
-              ("status" -> 200) ~
-                ("oid" -> oid)
-            ))).putHeaders(Header("Content-Type", "application/json"))
+                ("reason" -> s"create repo fail: $error")
+            ))).putHeaders(Header("Content-Type", "application/json")))
+          case Right(_) =>
+            for(
+              rst <- blogtech.core.userOps
+                      .createAccount(registerData.userName, registerData.email, registerData.password)
+            ) yield {
+              rst match {
+                case None =>
+                  Ok(compact(render(
+                    ("status" -> 400) ~
+                      ("reason" -> "user_has_exist")
+                  ))).putHeaders(Header("Content-Type", "application/json"))
+                case Some(oid) =>
+                  Ok(compact(render(
+                    ("status" -> 200) ~
+                      ("oid" -> oid)
+                  ))).putHeaders(Header("Content-Type", "application/json"))
+              }
+            }
         }
       }
 
-      response.flatten
+      response.flatten.flatten
   }
 
 }
