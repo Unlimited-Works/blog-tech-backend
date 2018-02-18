@@ -1,11 +1,11 @@
-package blogtech
+package blogtech.core
 
 import lorance.scall.{Auth, Config, Password, SessionPool}
 
 /**
   *
   */
-package object core {
+object Core {
   val sessionPool = new SessionPool(Auth(BlogConfig.sshEnv.host,
     Some(BlogConfig.sshEnv.user),
     22,

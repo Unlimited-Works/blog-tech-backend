@@ -1,6 +1,6 @@
 package blogtech.http
 
-import blogtech.core.gitOps
+import blogtech.core.Core.gitOps
 import cats.effect.IO
 import monix.eval.Task
 import org.http4s.{Header, HttpService}

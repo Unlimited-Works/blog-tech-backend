@@ -32,7 +32,7 @@ object Login extends Http4sDsl[IO] with Service {
       val rst = userData.flatMap{jsonStr =>
         val loginData = parse(jsonStr).extract[LoginReq]
 
-        val verifyLogin = blogtech.core.userOps.verifyUserPassword(loginData.account, loginData.password)
+        val verifyLogin = blogtech.core.Core.userOps.verifyUserPassword(loginData.account, loginData.password)
         verifyLogin flatMap {
           case true =>
             Ok(compact(render("status" -> 200)))
@@ -56,7 +56,7 @@ object Login extends Http4sDsl[IO] with Service {
       val response: IO[IO[Response[IO]]] = for{
         registerStr <- req.as[String]
         registerData = parse(registerStr).extract[RegisterReq]
-        rst <- blogtech.core.userOps
+        rst <- blogtech.core.Core.userOps
               .createAccount(registerData.userName, registerData.email, registerData.password)
 
       } yield {
