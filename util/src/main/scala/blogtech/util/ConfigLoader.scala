@@ -14,7 +14,7 @@ object ConfigLoader {
   private val develop = ConfigFactory.parseResourcesAnySyntax("application") //application is also develop environment in this project
   private val default = ConfigFactory.load() //default environment
 
-  private val myConfig = fileConf.withFallback(online).withFallback(local).withFallback(develop).resolve()
+  private val myConfig = fileConf.withFallback(local).withFallback(online).withFallback(develop).resolve()
   val combinedConfig: Config = myConfig.withFallback(default)
 
   println("===========BlogConfigBegin=============")

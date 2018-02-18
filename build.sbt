@@ -1,3 +1,5 @@
+import DevOps._
+import DevOpsCommon._
 
 Global / scalacOptions ++= Seq("-Ypartial-unification")
 
@@ -15,17 +17,16 @@ lazy val httpLibs = Seq(
   "org.specs2"     %% "specs2-core"          % Specs2Version % "test",
 
 )
-
 lazy val doobieLibs = Seq(
   //doobie
   "org.tpolecat" %% "doobie-core"     % doobieVersion,
   "org.tpolecat" %% "doobie-postgres" % doobieVersion,
   "org.tpolecat" %% "doobie-specs2"   % doobieVersion,
 )
-
 lazy val testLib = "junit" % "junit" % "4.12" % Test
 
 lazy val root = (project in file("."))
+  .enablePlugins(JavaServerAppPackaging)
   .settings(
     name := "blog-tech",
     version := "0.1",
@@ -44,10 +45,15 @@ lazy val root = (project in file("."))
       :+ testLib
 
   )
+  .settings(
+    mainClassPath := "blogtech.Main",
+    deployToServer,
+  )
   .dependsOn(util)
   .aggregate(util)
 
 lazy val gitServer = (project in file("git-server"))
+  .enablePlugins(JavaServerAppPackaging)
   .settings(
     name := "git-server",
     version := "0.1",
@@ -58,6 +64,10 @@ lazy val gitServer = (project in file("git-server"))
       httpLibs
       :+ testLib
 
+  )
+  .settings(
+    mainClassPath := "blogtech.gitproxy.ProxyMain",
+    deployToServer,
   )
   .dependsOn(util)
   .aggregate(util)
@@ -81,7 +91,6 @@ lazy val util = (project in file("util"))
       :+ testLib
   )
 
-
 cancelable in Scope.Global := true
-
+parallelExecution := false
 fork := true

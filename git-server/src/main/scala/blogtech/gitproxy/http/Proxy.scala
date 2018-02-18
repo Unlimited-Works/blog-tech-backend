@@ -9,7 +9,7 @@ import org.http4s.dsl.Http4sDsl
 import org.http4s.util.CaseInsensitiveString
 
 object Proxy extends Http4sDsl[IO] with Service {
-  private val httpClient = Http1Client[IO]()
+  private val httpClient = Http1Client[IO]()//.map(_.toHttpService)
 
   val newHost = ProxyConfig.proxyData.host
   val port = ProxyConfig.proxyData.port
@@ -51,7 +51,9 @@ object Proxy extends Http4sDsl[IO] with Service {
           }
           proxiedReq = req.withUri(req.uri.copy(authority = Some(newAuthority)))
             .withHeaders(newHeaders)
-          response <- client.fetch(proxiedReq)(x => IO.pure(x))
+          response <- {
+            client.fetch(proxiedReq)(x => IO.pure(x))
+          }
         } yield {
           response
         }
@@ -87,7 +89,7 @@ object Proxy extends Http4sDsl[IO] with Service {
             }
             verifyPassword
 //            if(password == "admin")
-            //verify success. and get real data form proxy
+////            verify success. and get real data form proxy
 //              doClient
 //            else
 //              Ok().withStatus(Status(401))

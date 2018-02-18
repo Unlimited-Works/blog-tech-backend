@@ -26,7 +26,7 @@ object ProxyMain extends StreamApp[IO] {
   val services: HttpService[IO] = blogtech.gitproxy.http.Http.httpService
   def stream(args: List[String], requestShutdown: IO[Unit]): fs2.Stream[IO, ExitCode] =
     BlazeBuilder[IO]
-      .bindHttp(8082, "0.0.0.0")
+      .bindHttp(8081, "0.0.0.0")
       .mountService(services, "/")
       .serve
 
