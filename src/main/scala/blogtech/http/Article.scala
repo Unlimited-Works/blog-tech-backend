@@ -23,7 +23,7 @@ object Article extends Http4sDsl[IO] with Service {
 
       def doLogic = {
         val articleContent = {
-          blogtech.core.Core.gitOps.getFile(username, rawFilePath)
+          blogtech.core.gitOps.getFile(username, rawFilePath)
         }
 
         Task.fromFuture(articleContent)
@@ -50,7 +50,7 @@ object Article extends Http4sDsl[IO] with Service {
       def doLogic = {
         val filPathStr = filePath.toString.tail //ignore '/' at beginning
         val articleContent = {
-          blogtech.core.Core.gitOps.getFile(username, filPathStr)
+          blogtech.core.gitOps.getFile(username, filPathStr)
         }
 
         def template(content: String, dealContent: String => String) = {

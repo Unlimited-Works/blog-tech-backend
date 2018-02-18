@@ -25,4 +25,14 @@ class GitOps(terminal: SessionPool) {
       .execAsync(Cmd(s"""cd ${BlogConfig.gitEnv.path}/$userName/blog.git; git ls-files --with-tree HEAD"""))
       .map(_.map(x => x.split('\n').toList))
   }
+
+  /**
+    * create git bare repo
+    */
+  def initRepo(userName: String): Future[Either[scall.Error, String]] = {
+    val cmd = s"cd ${BlogConfig.gitEnv.path}; mkdir ./$userName; git init --bare ./blog.git"
+    terminal.execAsync(Cmd(cmd))
+
+  }
+
 }
