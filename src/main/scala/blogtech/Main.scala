@@ -24,7 +24,7 @@ object Main extends StreamApp[IO] {
 
   def stream(args: List[String], requestShutdown: IO[Unit]): fs2.Stream[IO, ExitCode] =
     BlazeBuilder[IO]
-      .bindHttp(8080, "0.0.0.0")
+      .bindHttp(BlogConfig.httpEnv.port, "0.0.0.0")
       .mountService(services, "/")
       .serve
 

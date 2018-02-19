@@ -19,7 +19,10 @@ object BlogConfig {
     sshConfig.getString("password")
   )
 
+  val httpEnv = HttpEnv(combinedConfig.getInt("blogtech.http.port"))
+
 }
 
 case class GitEnv(path: String)
 case class SSHEnv(host: String, user: String, password: String)
+case class HttpEnv(port: Int)
