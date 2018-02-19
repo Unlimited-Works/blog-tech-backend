@@ -21,10 +21,4 @@ object DevOpsCommon {
   val localDeployUser = buildConfig.getString("deploy.localSSH.user")
   val localDeployPassword = buildConfig.getString("deploy.localSSH.password")
 
-  val sshRemoteSession = new SessionTerminal(Auth(
-    host = deployHost,
-    name = Some(deployUser),
-    port = 22,
-    key = Password(deployPassword)
-  ), Config(10, 4, 2))
 }
