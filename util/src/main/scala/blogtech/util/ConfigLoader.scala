@@ -25,7 +25,7 @@ object ConfigLoader {
   logger.info("===========BlogConfigEnd===============")
 
   def prefixConfig(prefix: String, srcConfig: Config) = ConfigFactory.parseString(prefix).withFallback(srcConfig)
-  def printConf(config: Config): Unit = println(config.root().render(ConfigRenderOptions.concise().setFormatted(true).setJson(true)))
+  def printConf(config: Config): Unit = logger.info(config.root().render(ConfigRenderOptions.concise().setFormatted(true).setJson(true)))
 
 
 }
