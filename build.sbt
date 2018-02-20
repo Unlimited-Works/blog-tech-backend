@@ -52,7 +52,7 @@ lazy val root = (project in file("."))
   .dependsOn(util)
   .aggregate(util)
 
-lazy val gitServer = (project in file("git-server"))
+lazy val `git-server` = (project in file("git-server"))
   .enablePlugins(JavaServerAppPackaging)
   .settings(
     name := "git-server",
