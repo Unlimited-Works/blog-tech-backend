@@ -41,6 +41,7 @@ lazy val root = (project in file("."))
         "io.monix" %% "monix" % "3.0.0-M3",
         "com.auth0" % "java-jwt" % "3.3.0",
         "org.planet42" %% "laika-core" % "0.7.5",
+        "com.atlassian.commonmark" % "commonmark-ext-gfm-tables" % "0.11.0",
       )
       :+ testLib
 
