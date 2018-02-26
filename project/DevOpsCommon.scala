@@ -15,7 +15,7 @@ object DevOpsCommon {
   private val buildConfig = ConfigFactory.parseFile(new File("./build.conf")).resolve()
   val deployHost = buildConfig.getString("deploy.host")
   val deployUser = buildConfig.getString("deploy.user")
-  val deployPassword = buildConfig.getString("deploy.password")
+  val deployKey = buildConfig.getString("deploy.key")
 
   val localDeployHost = buildConfig.getString("deploy.localSSH.host")
   val localDeployUser = buildConfig.getString("deploy.localSSH.user")
