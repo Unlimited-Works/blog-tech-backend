@@ -3,6 +3,8 @@ package blogtech
 import lorance.scall.{Auth, Config, Password, SessionPool}
 import org.slf4j.LoggerFactory
 
+import scala.util.control.NonFatal
+
 /**
   *
   */
@@ -26,7 +28,7 @@ package object core {
     try{
       f
     } catch {
-      case e =>
+      case NonFatal(e) =>
         logger.error(msg, e)
         throw e
     }
