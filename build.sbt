@@ -36,7 +36,7 @@ lazy val root = (project in file("."))
     libraryDependencies ++=
       httpLibs
       ++: Seq(
-        "com.scalachan" %% "scall" % "0.7.2",
+        "com.scalachan" %% "scall" % "0.7.3",
         "org.json4s" %% "json4s-native" % "3.6.0-M2",
         "io.monix" %% "monix" % "3.0.0-M3",
         "com.auth0" % "java-jwt" % "3.3.0",
