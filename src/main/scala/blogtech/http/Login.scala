@@ -26,7 +26,88 @@ object Login extends Http4sDsl[IO] with Service {
   override val service: HttpService[IO] = HttpService[IO] {
     case GET -> Root  =>
       //return login page
-      Ok("login page")
+      Ok(
+        """
+          |<!doctype html>
+          |<html lang="zh-cn">
+          |  <head>
+          |    <meta charset="UTF-8" />
+          |    <title>The HTML5 Herald</title>
+          |  </head>
+          |  <body>
+          |      user name: <input type="text" name="fname" />
+          |      password: <input type="password" name="lname" />
+          |      <button type="button" id="login-btn">Login</button>
+          |  </body>
+          |
+          |
+          |  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+          |  <script language="JavaScript">
+          |    $(document).ready(function(){
+          |        $("button").click(function(){
+          |             var name = $(":text").val();
+          |             var pwd =  $(":password").val();
+          |             $("#login-btn").prop('disabled', true);
+          |        //send ajax
+          |        $.ajax({
+          |            type: "POST",
+          |            url: "/login.json",
+          |            data: JSON.stringify({
+          |               account: name,
+          |               password: pwd
+          |            }),
+          |            dataType: "json",
+          |            contentType: "application/json; charset=utf-8",
+          |            success: function(data,status){
+          |              if (data.status === 200) {
+          |                window.location.replace("/" + name);
+          |              } else {
+          |                 alert("login fail: " + json)
+          |              }
+          |            }
+          |       });
+          |    });
+          |
+          |    })
+          |    /**
+          |    	//functions
+          |	var verifyFunc = function(){
+          |			var accountValue = $('#inputEmail').val();
+          |			var passwordValue = $('#inputPassword').val();
+          |
+          |			$(".ajax-btn-verify").prop('disabled', true);
+          |			$(".ajax-btn-verify").text('正在登录...');
+          |			$.post({
+          |				url: verifyApi,
+          |				data: {
+          |					account: accountValue,
+          |					password: passwordValue
+          |				},
+          |				success: function(data,status){
+          |						var json = jQuery.parseJSON(data);
+          |						console.log("Data: " + data + "\nStatus: " + status)
+          |						if (json.result === 200) {
+          |              rememberMeFunc(accountValue, passwordValue, function(){
+          |                window.location.replace("/blog/index");
+          |                //alert("window.location.replace('/blog/index');")
+          |              });
+          |						}
+          |						else if (json.result === 400) {
+          |							$("#signin-tip").text(json.msg);
+          |							$(".ajax-btn-verify").text('登录');
+          |							$(".ajax-btn-verify").prop('disabled', false);
+          |						}
+          |				},
+          |				xhrFields: {
+          |					 withCredentials: true
+          |				},
+          |				crossDomain: true
+          |			});
+          |    };
+          |    **/
+          |  </script>
+          |</html>
+        """.stripMargin)
         .putHeaders(Header("Content-Type", "text/html"))
     case req @ POST -> Root / "login.json" =>
       val userData = req.as[String]
