@@ -70,42 +70,6 @@ object Login extends Http4sDsl[IO] with Service {
           |    });
           |
           |    })
-          |    /**
-          |    	//functions
-          |	var verifyFunc = function(){
-          |			var accountValue = $('#inputEmail').val();
-          |			var passwordValue = $('#inputPassword').val();
-          |
-          |			$(".ajax-btn-verify").prop('disabled', true);
-          |			$(".ajax-btn-verify").text('正在登录...');
-          |			$.post({
-          |				url: verifyApi,
-          |				data: {
-          |					account: accountValue,
-          |					password: passwordValue
-          |				},
-          |				success: function(data,status){
-          |						var json = jQuery.parseJSON(data);
-          |						console.log("Data: " + data + "\nStatus: " + status)
-          |						if (json.result === 200) {
-          |              rememberMeFunc(accountValue, passwordValue, function(){
-          |                window.location.replace("/blog/index");
-          |                //alert("window.location.replace('/blog/index');")
-          |              });
-          |						}
-          |						else if (json.result === 400) {
-          |							$("#signin-tip").text(json.msg);
-          |							$(".ajax-btn-verify").text('登录');
-          |							$(".ajax-btn-verify").prop('disabled', false);
-          |						}
-          |				},
-          |				xhrFields: {
-          |					 withCredentials: true
-          |				},
-          |				crossDomain: true
-          |			});
-          |    };
-          |    **/
           |  </script>
           |</html>
         """.stripMargin)
