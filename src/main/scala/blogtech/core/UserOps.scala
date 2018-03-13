@@ -10,7 +10,7 @@ class UserOps {
   def verifyUserPassword(account: String, password: String) = {
     userDao.getUserByNameOrEmail(account)
       .map(x =>
-        x.fold(false)(_.password == Helper.toMd5(password))
+        x.fold(false)(_.password == Helper.toSHA256(password))
       )
   }
 

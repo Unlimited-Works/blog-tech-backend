@@ -69,7 +69,7 @@ object Proxy extends Http4sDsl[IO] with Service {
                 case None =>
                   Ok().withStatus(Status(401))
                 case Some(userDt) =>
-                  if(blogtech.util.Helper.toMd5(password) == userDt.password)
+                  if(blogtech.util.Helper.toSHA256(password) == userDt.password)
                     doClient
                   else
                     Ok().withStatus(Status(401))
