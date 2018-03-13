@@ -10,7 +10,8 @@ import org.http4s.HttpService
 object Http {
   private val services: Service = Login andThen
                                   Overview andThen
-                                  Article
+                                  Article andThen
+                                  Tool
 
   val httpService: HttpService[IO] = services.service
 
