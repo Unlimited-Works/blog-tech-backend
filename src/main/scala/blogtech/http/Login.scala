@@ -62,7 +62,8 @@ object Login extends Http4sDsl[IO] with Service {
           |              if (data.status === 200) {
           |                window.location.replace("/" + name);
           |              } else {
-          |                 alert("login fail: " + json)
+          |                 alert("login fail: " + data.reason);
+          |                 $("#login-btn").prop('disabled', false);
           |              }
           |            }
           |       });
