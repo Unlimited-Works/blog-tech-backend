@@ -5,7 +5,7 @@ import sbt.Keys._
 object DevOps {
   test2 := {
     println(deployHost)
-    println(deployKey)
+    println(deployPassword)
     Unit
   }
 
@@ -35,13 +35,15 @@ object DevOps {
         host = deployHost,
         name = Some(deployUser),
         port = 22,
-        key = IdentityFile(deployKey)
+//        key = IdentityFile(deployKey)
+        key = Password(deployPassword)
       ))
       val sshRemoteSession = new SessionTerminal(Auth(
         host = deployHost,
         name = Some(deployUser),
         port = 22,
-        key = IdentityFile(deployKey)
+//        key = IdentityFile(deployKey)
+        key = Password(deployPassword)
       ), Config(10, 4, 2))
 
       //ensure directory exist
@@ -50,7 +52,7 @@ object DevOps {
 
       val zipFileName = s"$projectName-$projectVersion.zip"
       val scpRemoteCmd = Cmd(//s"sshpass -p '$deployKey' " +
-        s"scp -i $deployKey ${targetDir.getPath}/universal/$zipFileName $deployUser@$deployHost:~/$projectName/")
+        s"sshpass -p '$deployPassword' scp ${targetDir.getPath}/universal/$zipFileName $deployUser@$deployHost:~/$projectName/")
       println("scp executable zip to remote: ")
       println("scp to remote: " + sshLocal.exc(scpRemoteCmd).right.get)
       println(s"cd ~/$projectName: " + sshRemote.exc(Cmd(s"cd ~/$projectName")).right.get)

@@ -3,8 +3,8 @@ import DevOpsCommon._
 
 Global / scalacOptions ++= Seq("-Ypartial-unification")
 
-val scalacVersion = "2.12.4"
-val Http4sVersion = "0.18.0"
+val scalacVersion = "2.12.6"
+val Http4sVersion = "0.18.4"
 val Specs2Version = "4.0.0"
 val LogbackVersion = "1.2.3"
 val doobieVersion = "0.5.0"
@@ -19,7 +19,7 @@ lazy val httpLibs = Seq(
 )
 lazy val doobieLibs = Seq(
   //doobie
-  "org.tpolecat" %% "doobie-core"     % doobieVersion,
+  "org.tpolecat" %% "doobie-core"     % doobieVersion withSources(),
   "org.tpolecat" %% "doobie-postgres" % doobieVersion,
   "org.tpolecat" %% "doobie-specs2"   % doobieVersion,
 )
